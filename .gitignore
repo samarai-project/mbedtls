@@ -56,3 +56,5 @@ massif-*
 /TAGS
 /cscope*.out
 /tags
+/build_vs2017_x64
+/build_vs2017_win32
