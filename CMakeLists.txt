@@ -198,7 +198,10 @@ if(CMAKE_COMPILER_IS_GNU)
         endif()
     endif()
     if (GCC_VERSION VERSION_GREATER 7.0 OR GCC_VERSION VERSION_EQUAL 7.0)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat-overflow=2 -Wformat-truncation=2")
+      #JKU 2021-01-13: Removed option -Wformat-truncation=2 in order to be able to compile using
+      #                gcc 9.3 on MacOS. Clang 13 would not compile so need to fall back to gcc. Gcc 11 would
+      #                not compile either so switched to gcc 9.3 which worked after removing this option
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat-overflow=2")
     endif()
     set(CMAKE_C_FLAGS_RELEASE     "-O2")
     set(CMAKE_C_FLAGS_DEBUG       "-O0 -g3")
