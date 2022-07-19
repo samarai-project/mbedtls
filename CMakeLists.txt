@@ -173,17 +173,6 @@ string(REGEX MATCH "Clang" CMAKE_COMPILER_IS_CLANG "${CMAKE_C_COMPILER_ID}")
 
 include(CheckCCompilerFlag)
 
-###################################################################################################
-# MacOS target (JKU 2022-05-15)
-###################################################################################################
-
-if (APPLE) 
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version" FORCE)
-endif ()
-
-###################################################################################################
-###################################################################################################
-
 if(CMAKE_COMPILER_IS_GNU)
     # some warnings we want are not available with old GCC versions
     # note: starting with CMake 2.8 we could use CMAKE_C_COMPILER_VERSION
