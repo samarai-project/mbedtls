@@ -28,7 +28,6 @@
 #include "test/psa_helpers.h"
 
 #include <psa/crypto.h>
-#include <psa_crypto_slot_management.h>
 
 #if defined(MBEDTLS_USE_PSA_CRYPTO)
 #include "mbedtls/psa_util.h"
@@ -186,6 +185,14 @@ psa_status_t mbedtls_test_record_status( psa_status_t status,
 
 #endif /* defined(RECORD_PSA_STATUS_COVERAGE_LOG) */
 
+/** Return extended key usage policies.
+ *
+ * Do a key policy permission extension on key usage policies always involves
+ * permissions of other usage policies
+ * (like PSA_KEY_USAGE_SIGN_HASH involves PSA_KEY_USAGE_SIGN_MESSGAE).
+ */
+psa_key_usage_t mbedtls_test_update_key_usage_flags( psa_key_usage_t usage_flags );
+
 /** Skip a test case if the given key is a 192 bits AES key and the AES
  *  implementation is at least partially provided by an accelerator or
  *  alternative implementation.
@@ -275,8 +282,11 @@ psa_status_t mbedtls_test_record_status( psa_status_t status,
 /** \def USE_PSA_INIT
  *
  * Call this macro to initialize the PSA subsystem if #MBEDTLS_USE_PSA_CRYPTO
- * is enabled and do nothing otherwise. If the initialization fails, mark
- * the test case as failed and jump to the \p exit label.
+ * or #MBEDTLS_SSL_PROTO_TLS1_3 (In contrast to TLS 1.2 implementation, the
+ * TLS 1.3 one uses PSA independently of the definition of
+ * #MBEDTLS_USE_PSA_CRYPTO) is enabled and do nothing otherwise. If the
+ * initialization fails, mark the test case as failed and jump to the \p exit
+ * label.
  */
 /** \def USE_PSA_DONE
  *
@@ -284,15 +294,15 @@ psa_status_t mbedtls_test_record_status( psa_status_t status,
  * This is like #PSA_DONE, except that it does nothing if
  * #MBEDTLS_USE_PSA_CRYPTO is disabled.
  */
-#if defined(MBEDTLS_USE_PSA_CRYPTO)
+#if defined(MBEDTLS_USE_PSA_CRYPTO) || defined(MBEDTLS_SSL_PROTO_TLS1_3)
 #define USE_PSA_INIT( ) PSA_INIT( )
 #define USE_PSA_DONE( ) PSA_DONE( )
-#else /* MBEDTLS_USE_PSA_CRYPTO */
+#else /* MBEDTLS_USE_PSA_CRYPTO || MBEDTLS_SSL_PROTO_TLS1_3 */
 /* Define empty macros so that we can use them in the preamble and teardown
  * of every test function that uses PSA conditionally based on
  * MBEDTLS_USE_PSA_CRYPTO. */
 #define USE_PSA_INIT( ) ( (void) 0 )
 #define USE_PSA_DONE( ) ( (void) 0 )
-#endif /* !MBEDTLS_USE_PSA_CRYPTO */
+#endif /* !MBEDTLS_USE_PSA_CRYPTO && !MBEDTLS_SSL_PROTO_TLS1_3 */
 
 #endif /* PSA_CRYPTO_HELPERS_H */
