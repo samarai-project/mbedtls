@@ -20,10 +20,6 @@ if (APPLE AND APPLE_TARGET_ARCHITECTURE)
     if (APPLE_FOUND_ARCHITECTURE STREQUAL "arm64")
         if (APPLE_TARGET_ARCHITECTURE STREQUAL "x86_64")
             set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "")
-            # when targeting x86 on an Apple silicon machine we need to disable ASM or
-            # the compilation fails    
-            add_compile_definitions(CRYPTOPP_DISABLE_ASM)
-            message(WARNING "ASM Support Disabled!")
             message(STATUS "Target architecture: ${APPLE_TARGET_ARCHITECTURE}")
         elseif (APPLE_TARGET_ARCHITECTURE STREQUAL "arm64")
             message("Targeting arm64 on arm64 machine")
