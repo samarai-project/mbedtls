@@ -1,2 +1,7 @@
-#cmake fails for some reason. make works, even if there's error when building test
-make
+clear
+rm -r build
+mkdir -p build
+cd build
+cmake -G Ninja -D CMAKE_BUILD_TYPE=Release .. 
+cmake --build ./
+cd ..
